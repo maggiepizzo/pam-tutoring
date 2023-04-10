@@ -1,0 +1,592 @@
+{
+  "sessions": [
+    {
+      "id": "ee699140-5137-4534-868f-b6e52f1c174b",
+      "type": "in-person",
+      "day": 3,
+      "date": "2023-04-05T07:00:00.000Z",
+      "dateString": "Wed Apr 05 2023",
+      "time": 8,
+      "length": 1,
+      "user": {
+        "id": "maggie.pizzo@gmail.com",
+        "email": "mag",
+        "name": "Maggie Pizzo"
+      },
+      "paid": true
+    },
+    {
+      "id": "1f2f833d-b7dd-4859-b03b-10df34f07984",
+      "type": "in-person",
+      "day": 4,
+      "date": "2023-04-06T07:00:00.000Z",
+      "dateString": "Thu Apr 06 2023",
+      "time": 9,
+      "length": 1,
+      "user": {
+        "id": "maggie.pizzo@gmail.com",
+        "email": "mag",
+        "name": "Maggie Pizzo"
+      },
+      "paid": true
+    },
+    {
+      "id": "a758ad5f-9f95-4002-bac1-d05de832b35a",
+      "type": "in-person",
+      "day": 4,
+      "date": "2023-04-06T07:00:00.000Z",
+      "dateString": "Thu Apr 06 2023",
+      "time": 10,
+      "length": 1,
+      "user": {
+        "id": "maggie.pizzo@gmail.com",
+        "email": "mag",
+        "name": "Maggie Pizzo"
+      },
+      "paid": true
+    },
+    {
+      "id": "af628fa7-ffa7-42d2-aa54-fcb9a82d7911",
+      "type": "remote",
+      "day": 5,
+      "date": "2023-04-07T07:00:00.000Z",
+      "dateString": "Fri Apr 07 2023",
+      "time": "17",
+      "length": 1,
+      "user": {
+        "id": "maggie.pizzo@gmail.com",
+        "email": "mag",
+        "name": "Maggie Pizzo"
+      },
+      "paid": true
+    },
+    {
+      "id": "118ff52c-ec15-4048-881c-4a0e513f5c92",
+      "type": "in-person",
+      "day": 3,
+      "date": "2023-04-05T07:00:00.000Z",
+      "dateString": "Wed Apr 05 2023",
+      "time": 9,
+      "length": 1,
+      "user": {
+        "id": "maggie.pizzo@gmail.com",
+        "email": "mag",
+        "name": "Maggie Pizzo"
+      },
+      "paid": true
+    },
+    {
+      "id": "1392819c-9976-4f69-9a3f-62778c78137d",
+      "type": "in-person",
+      "day": 4,
+      "date": "2023-04-06T07:00:00.000Z",
+      "dateString": "Thu Apr 06 2023",
+      "time": "12.5",
+      "length": "1.5",
+      "user": {
+        "id": "dp",
+        "email": "dp",
+        "name": "DP Friedman"
+      },
+      "paid": true
+    },
+    {
+      "id": "b1566dd6-57e7-4e8a-b131-f7dd899747ff",
+      "type": "in-person",
+      "day": 5,
+      "date": "2023-04-07T07:00:00.000Z",
+      "dateString": "Fri Apr 07 2023",
+      "time": "16",
+      "length": 1,
+      "user": {
+        "id": "dp",
+        "email": "dp",
+        "name": "DP Friedman"
+      },
+      "paid": true
+    },
+    {
+      "id": "65877062-af2b-4e01-84aa-d7a909966277",
+      "type": "remote",
+      "day": 6,
+      "date": "2023-04-08T07:00:00.000Z",
+      "dateString": "Sat Apr 08 2023",
+      "time": "12.75",
+      "length": "0.75",
+      "user": {
+        "id": "maggie.pizzo@gmail.com",
+        "email": "mag",
+        "name": "Maggie Pizzo"
+      },
+      "paid": false
+    },
+    {
+      "id": "0e118894-a907-4c94-8ca7-915ce854c9f2",
+      "type": "remote",
+      "day": 6,
+      "date": "2023-04-08T07:00:00.000Z",
+      "dateString": "Sat Apr 08 2023",
+      "time": "9",
+      "length": 1,
+      "user": {
+        "id": "dp",
+        "email": "dp",
+        "name": "DP Friedman"
+      },
+      "paid": false
+    },
+    {
+      "id": "cab4d89c-1fca-49ea-a201-cba2c7b792ea",
+      "type": "in-person",
+      "day": 5,
+      "date": "2023-04-07T07:00:00.000Z",
+      "dateString": "Fri Apr 07 2023",
+      "time": 18,
+      "length": 1,
+      "user": {
+        "id": "dp1",
+        "email": "dp1",
+        "name": "dp friedman"
+      },
+      "paid": false
+    },
+    {
+      "id": "7e44d6bc-ee77-4a8e-a629-8c8c2d801440",
+      "type": "remote",
+      "day": 4,
+      "date": "2023-04-13T07:00:00.000Z",
+      "dateString": "Thu Apr 13 2023",
+      "time": "14.5",
+      "length": 1,
+      "user": {
+        "id": "dp",
+        "email": "dp",
+        "name": "David Friedman"
+      },
+      "paid": false
+    },
+    {
+      "id": "332b8a24-dbca-464d-b320-a059bea32ddb",
+      "type": "in-person",
+      "day": 5,
+      "date": "2023-04-14T07:00:00.000Z",
+      "dateString": "Fri Apr 14 2023",
+      "time": "18",
+      "length": 1,
+      "user": {
+        "id": "dp",
+        "email": "dp",
+        "name": "David Friedman"
+      },
+      "paid": false
+    }
+  ],
+  "availability": [
+    {
+      "id": "39fe4207-b7f6-4acf-bf2f-838d1bade4e8",
+      "day": 2,
+      "times": [
+        {
+          "id": "bfe51bd0-2f6a-407e-939d-dc1e33e71ad4",
+          "time": 10,
+          "length": 1
+        },
+        {
+          "id": "e12b8356-c2de-479a-bc66-89a9ee394b2f",
+          "time": 11,
+          "length": 1
+        },
+        {
+          "id": "39962fe8-f53d-4bcf-bb5f-6afaafb4b5da",
+          "time": 12,
+          "length": 1
+        },
+        {
+          "id": "a64a89f5-7cc3-4249-9c87-22d96f88fa72",
+          "time": 13,
+          "length": 1
+        },
+        {
+          "id": "3e8ee5cd-0b04-4dca-a015-e894a85164e1",
+          "time": 14,
+          "length": 1
+        },
+        {
+          "id": "d7489d28-dc03-4548-8fee-c83d0b3cd932",
+          "time": 15,
+          "length": 1
+        },
+        {
+          "id": "67a31e52-09b3-42b2-ace4-3352c337d4dc",
+          "time": "17",
+          "length": 1
+        },
+        {
+          "id": "9bbb91a5-851b-4f6c-89f3-21933c94c6f0",
+          "time": 18,
+          "length": 1
+        }
+      ]
+    },
+    {
+      "id": "f20eb4c2-ece4-450a-b168-e8e0b2914b1f",
+      "day": 3,
+      "times": [
+        {
+          "id": "266444c2-86a2-4125-9684-947e895be4d8",
+          "time": 8,
+          "length": 1
+        },
+        {
+          "id": "b4ce43af-6e5b-4796-ad7d-23de9385958c",
+          "time": 9,
+          "length": 1
+        }
+      ]
+    },
+    {
+      "id": "c66ac8ac-f3a0-4da0-b310-a8c87cd9134e",
+      "day": 4,
+      "times": [
+        {
+          "id": "ac73324b-01e7-46ce-a980-3c54ea1f88fe",
+          "time": 9,
+          "length": 1
+        },
+        {
+          "id": "fb48bdbd-2cb7-4569-8e8b-349d160a1f08",
+          "time": 10,
+          "length": 1
+        },
+        {
+          "id": "0eeebe68-e4c2-40fc-a837-3f5f75a00cff",
+          "time": "12.5",
+          "length": "1.5"
+        },
+        {
+          "id": "6970f964-3743-4691-ac04-b9fc777cf2c6",
+          "time": "14.5",
+          "length": 1
+        },
+        {
+          "id": "f587c616-a08d-4c5b-afe2-f7b554ec8a5e",
+          "time": 15.5,
+          "length": 1
+        },
+        {
+          "id": "c8af49a3-45a9-4f11-9fb8-a4bc8a804a37",
+          "time": 16.5,
+          "length": 1
+        }
+      ]
+    },
+    {
+      "id": "d7648404-dc5b-4d56-9714-727dd6a71d05",
+      "day": 5,
+      "times": [
+        {
+          "id": "61a248cd-0bd4-4a7a-89f1-4027ce8ef2a3",
+          "time": 16,
+          "length": 1
+        },
+        {
+          "id": "3d4065da-7a6a-46ce-96fe-02adc14e3bd0",
+          "time": 17,
+          "length": 1
+        },
+        {
+          "id": "c996972d-42c2-40bf-8fd5-26902d38cafb",
+          "time": 18,
+          "length": 1
+        },
+        {
+          "id": "5749f912-969a-4872-8c35-994e39071d4d",
+          "time": 19,
+          "length": 1
+        },
+        {
+          "id": "02558226-f98d-4e08-b5f1-d73519b14b97",
+          "time": 20,
+          "length": 1
+        }
+      ]
+    },
+    {
+      "id": "927cd016-4132-4fe1-8f62-8cca98d4d4aa",
+      "day": 6,
+      "times": [
+        {
+          "id": "352937ed-a742-49cb-964e-278427a497a4",
+          "time": 8,
+          "length": 1
+        },
+        {
+          "id": "9f1968f1-980e-4627-9d99-04450b237ee1",
+          "time": "9",
+          "length": 1
+        },
+        {
+          "id": "df9334d4-70f6-4aea-8817-7a370c99a1c2",
+          "time": 10,
+          "length": 1
+        },
+        {
+          "id": "f18eedd6-3cc1-49d6-84cd-681e179d65ec",
+          "time": 11,
+          "length": 1
+        }
+      ]
+    },
+    {
+      "id": "9570db4b-13d3-4680-ab93-277ade999609",
+      "day": 1,
+      "times": [
+        {
+          "id": "efb90d5d-1aee-42da-996f-3b91d7ba2031",
+          "time": "10",
+          "length": 1
+        },
+        {
+          "id": "24507b48-550a-452a-afe4-48115ac71a90",
+          "time": 11,
+          "length": 1
+        },
+        {
+          "id": "909f6d9d-95e3-4ea9-8559-408dd624c73a",
+          "time": 12,
+          "length": 1
+        },
+        {
+          "id": "a35cfdb0-8467-48e9-b679-72528fbf4792",
+          "time": 13,
+          "length": 1
+        },
+        {
+          "id": "fe810090-96b2-4161-880a-25a11448adeb",
+          "time": 14,
+          "length": 1
+        },
+        {
+          "id": "a91fe82a-c2e6-49c5-8fc1-c3b55bd5d504",
+          "time": 15,
+          "length": 1
+        }
+      ]
+    }
+  ],
+  "specialAvailability": [
+    {
+      "id": "8cbc0574-73ae-4feb-8ca4-402059d770ce",
+      "day": 6,
+      "times": [
+        {
+          "id": "352937ed-a742-49cb-964e-278427a497a4",
+          "time": 8,
+          "length": 1
+        },
+        {
+          "id": "9f1968f1-980e-4627-9d99-04450b237ee1",
+          "time": 9,
+          "length": 1
+        },
+        {
+          "id": "df9334d4-70f6-4aea-8817-7a370c99a1c2",
+          "time": 10,
+          "length": 1
+        },
+        {
+          "id": "d9d13fac-9302-4023-8358-66898eeaafa6",
+          "time": "11.75",
+          "length": 1
+        },
+        {
+          "id": "a17c13a3-72bb-465a-9159-59a8910da2c4",
+          "time": 12.75,
+          "length": "0.75"
+        }
+      ],
+      "date": "2023-04-08T07:00:00.000Z",
+      "dateString": "Sat Apr 08 2023"
+    },
+    {
+      "id": "731c9afe-59e9-4c88-984c-21fa3971a03d",
+      "day": 6,
+      "times": [
+        {
+          "id": "352937ed-a742-49cb-964e-278427a497a4",
+          "time": 8,
+          "length": 1
+        },
+        {
+          "id": "f18eedd6-3cc1-49d6-84cd-681e179d65ec",
+          "time": 11,
+          "length": 1
+        },
+        {
+          "id": "b06f7524-543d-4d6e-8470-3c952640b66c",
+          "time": "13.25",
+          "length": "2"
+        }
+      ],
+      "date": "2023-04-15T07:00:00.000Z",
+      "dateString": "Sat Apr 15 2023"
+    },
+    {
+      "id": "045d7533-6a1b-4fe8-9ea9-2c43ddd6bb8a",
+      "day": 3,
+      "times": [
+        {
+          "id": "b4ce43af-6e5b-4796-ad7d-23de9385958c",
+          "time": 9,
+          "length": 1
+        }
+      ],
+      "date": "2023-04-12T07:00:00.000Z",
+      "dateString": "Wed Apr 12 2023"
+    },
+    {
+      "id": "073c284f-f6d1-4074-b32f-d58f9052e407",
+      "day": 5,
+      "times": [
+        {
+          "id": "3d4065da-7a6a-46ce-96fe-02adc14e3bd0",
+          "time": 17,
+          "length": 1
+        },
+        {
+          "id": "c996972d-42c2-40bf-8fd5-26902d38cafb",
+          "time": 18,
+          "length": 1
+        }
+      ],
+      "date": "2023-04-28T07:00:00.000Z",
+      "dateString": "Fri Apr 28 2023"
+    },
+    {
+      "id": "3d220e00-03a9-4215-bade-c6036f264a76",
+      "day": 4,
+      "times": [
+        {
+          "id": "ac73324b-01e7-46ce-a980-3c54ea1f88fe",
+          "time": 9,
+          "length": 1
+        },
+        {
+          "id": "fb48bdbd-2cb7-4569-8e8b-349d160a1f08",
+          "time": 10,
+          "length": 1
+        },
+        {
+          "id": "0eeebe68-e4c2-40fc-a837-3f5f75a00cff",
+          "time": "12.5",
+          "length": "1.5"
+        },
+        {
+          "id": "6970f964-3743-4691-ac04-b9fc777cf2c6",
+          "time": "14.5",
+          "length": "0.75"
+        },
+        {
+          "id": "f587c616-a08d-4c5b-afe2-f7b554ec8a5e",
+          "time": "15.75",
+          "length": 1
+        },
+        {
+          "id": "c8af49a3-45a9-4f11-9fb8-a4bc8a804a37",
+          "time": "17.5",
+          "length": 1
+        }
+      ],
+      "date": "2023-04-06T07:00:00.000Z",
+      "dateString": "Thu Apr 06 2023"
+    },
+    {
+      "id": "27a32991-7a31-40a5-922b-61d30dbfdb07",
+      "day": 1,
+      "times": [
+        {
+          "id": "909f6d9d-95e3-4ea9-8559-408dd624c73a",
+          "time": 12,
+          "length": 1
+        },
+        {
+          "id": "a35cfdb0-8467-48e9-b679-72528fbf4792",
+          "time": 13,
+          "length": 1
+        },
+        {
+          "id": "fe810090-96b2-4161-880a-25a11448adeb",
+          "time": 14,
+          "length": "0.75"
+        },
+        {
+          "id": "8abeeda6-5368-4226-8326-80b2c7e30c99",
+          "time": "14.75",
+          "length": "2"
+        },
+        {
+          "id": "15e50265-f242-4b49-8d75-4fe11e9569a1",
+          "time": 16.75,
+          "length": "1.25"
+        },
+        {
+          "id": "494f2f5b-4cdf-45ad-9122-1917a43fcab7",
+          "time": 18,
+          "length": 1
+        }
+      ],
+      "date": "2023-04-10T07:00:00.000Z",
+      "dateString": "Mon Apr 10 2023"
+    }
+  ],
+  "users": [
+    {
+      "id": "pam.friedman@gmail.com",
+      "email": "pam.friedman@gmail.com",
+      "password": "123",
+      "admin": true,
+      "name": "Pam Friedman",
+      "rate": 0
+    },
+    {
+      "id": "maggie.pizzo@gmail.com",
+      "email": "maggie.pizzo@gmail.com",
+      "password": "123",
+      "admin": false,
+      "name": "Maggie Pizzo",
+      "rate": 100
+    },
+    {
+      "id": "friedmandavid10@gmail.com",
+      "email": "friedmandavid10@gmail.com",
+      "password": "123",
+      "admin": false,
+      "name": "David Friedman",
+      "rate": 100
+    },
+    {
+      "id": "dp",
+      "email": "dp",
+      "password": "123",
+      "admin": false,
+      "name": "David Friedman",
+      "rate": 100
+    },
+    {
+      "id": "mag",
+      "email": "mag",
+      "password": "123",
+      "admin": false,
+      "name": "Mag Piz",
+      "rate": 100
+    },
+    {
+      "id": "dp1",
+      "email": "dp1",
+      "password": "123",
+      "admin": false,
+      "name": "dp friedman",
+      "rate": 100
+    }
+  ]
+}
