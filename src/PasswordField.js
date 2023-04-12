@@ -18,6 +18,7 @@ const PasswordField = ({placeholder, onChange}) => {
                 title={showPassword ? "Hide password" : "Show password"}
                 src={showPassword ? showEye : hideEye}
                 onClick={() => setShowPassword(!showPassword)}
+                alt={showPassword ? "Hide" : "Show"}
                 />
         </div>
     )

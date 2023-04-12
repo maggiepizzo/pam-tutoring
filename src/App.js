@@ -50,19 +50,19 @@ function App() {
     fetch('http://localhost:5000/sessions/')
     .then(res => res.json())
     .then(result => {setBookedSessions(result)})
-  }, [view])
+  }, [])
 
   useEffect(() => {
     fetch('http://localhost:5000/availability/')
     .then(res => res.json())
     .then(result => {setAvailability(result)})
-  }, [view])
+  }, [])
 
   useEffect(() => {
     fetch('http://localhost:5000/specialAvailability/')
     .then(res => res.json())
     .then(result => {setSpecialAvailability(result)})
-  }, [view])
+  }, [])
 
   return (
     <div className="App">
@@ -107,12 +107,15 @@ function App() {
 
       <div className='Calendar-container'>
         {view === 'schedule' && <Calendar 
-          loadedBookedSessions={bookedSessions} 
-          loadedAvailability={availability} 
-          loadedSpecialAvailability={specialAvailability}
+          bookedSessions={bookedSessions} 
+          setBookedSessions={setBookedSessions}
+          availability={availability} 
+          setAvailability={setAvailability}
+          specialAvailability={specialAvailability}
+          setSpecialAvailability={setSpecialAvailability}
           user={user} 
           users={users}/>}
-        {view === 'payments' && <Payments bookedSessions={bookedSessions} user={user} users={users}/>}
+        {view === 'payments' && <Payments bookedSessions={bookedSessions} setBookedSessions={setBookedSessions} user={user} users={users} setUsers={setUsers}/>}
         {view === 'home' && user &&  <p> Hi, {user.name}!  Use the buttons above to navigate to your schedule and payments.</p>}
         {view === 'home' && !user && <HomePage/>}
         {view === 'login' && <Login 

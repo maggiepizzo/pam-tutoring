@@ -72,8 +72,8 @@ ul {
 .passwordContainer img {
   position: absolute;
   height: 20px;
-  right: 20px;
-  top: 20px;
+  right: 32px;
+  top: 27px;
   cursor: pointer;
 }
 
@@ -129,37 +129,11 @@ ul {
   margin-top: 20px;
 }
 
-.Message-box {
-  width: 40%;
-  min-height: 50px;
-  height: fit-content;
-}
-
-.Message-form {
-  width: 100%;
-  display: inline-block;
-  justify-content: center;
-}
-
-.Time-button {
-  background-color: rgba(244, 243, 237);
-  color: rgb(70, 64, 64);
-  font-size: 16px;
-  border: none;
-  border-radius: 10px;
-  width: 80px;
-  height: 30px;
-  padding: 5px;
-  margin-top: 10px;
-}
-
 .Tab-selected,
-.Time-button-selected,
 .Submit-button-selected {
   background-color: rgb(215, 214, 205);
 }
 
-.Time-button:hover,
 .Tab:hover {
   background-color: rgb(215, 214, 205);
   cursor: pointer;
@@ -168,16 +142,6 @@ ul {
 .Submit-button:disabled {
   background-color: rgba(244, 243, 237);
   cursor: auto;
-}
-
-.Schedule-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.userButtonContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .homePageHeader {

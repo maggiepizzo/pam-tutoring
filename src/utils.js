@@ -1,7 +1,7 @@
 const timeString = (time) => {
     let [hours, mins] = [Math.floor(parseFloat(time)), parseFloat(time) % 1]
     hours = hours % 12
-    if (hours == 0) {
+    if (hours === 0) {
         hours = 12
     }
     mins *= 60
@@ -19,7 +19,7 @@ const lengthString = (length) => {
 const typeString = (type) => {
     if (type === "in-person") {
       return "In Person"
-    }  else if (type == "remote") {
+    }  else if (type === "remote") {
       return "Remote"
     } else {
       return type

@@ -3,6 +3,7 @@ import { useState, Fragment } from 'react';
 import { v4 as uuid } from 'uuid';
 import './Calendar.css'
 import { typeString, timeString, lengthString } from './utils';
+import { last } from 'lodash';
 
 const MONTHS = [
   "January",
@@ -46,8 +47,10 @@ const findEventsForDate = (events, dateString) => {
 }
 
 const findAvailabilityForDate = (availability, specialAvailability, dateString, day) => {
-  return specialAvailability.find(a => a.dateString === dateString) ??
-   availability.find(a => a.day == day)
+  return {
+    "special" : specialAvailability.find(a => a.dateString === dateString),
+    "recurring" : availability.find(a => a.day == day)
+  }
 }
 
 const getTimeArray = (start, end, step) => {
@@ -175,7 +178,8 @@ const Event = ({ event, setViewingEvent, setShowingEventForm, deleteEvent, avail
   const title = (admin ? `${event.user.name}: ` : "") + 
   `${event.dateString} at ${timeString(event.time)} for ${lengthString(event.length)} (${typeString(event.type)})`
    
-  const dateAvailability = findAvailabilityForDate(availability, specialAvailability, event.dateString, event.day)
+  const dateAvailabilityObject = findAvailabilityForDate(availability, specialAvailability, event.dateString, event.day)
+  const dateAvailability = dateAvailabilityObject.special ?? dateAvailabilityObject.recurring
   // get all the sessions for this day EXCEPT the one I'm editing (that should stay a timeslot option)
   const prebookedSessions = findEventsForDate(bookedSessions, event.dateString).filter(sesh => sesh.id != event.id)
 
@@ -302,16 +306,30 @@ const AvailabilityForm = ({
       addAvailability,
       editAvailability, 
       addSpecialAvailability  }) => {
-    const newEvent = withEvent || {
+
+    const recurringEvent = withEvent && withEvent.recurring ? withEvent.recurring : {
         id: uuid(),
         day: preselectedDate.getDay(),
         times: [{id: uuid(), time: START_TIME, length: 1}],
     }
-    const [event, setEvent] = useState(newEvent)
-    const [recurring, setRecurring] = useState(1)
+
+    const specialEvent = withEvent && withEvent.special ? withEvent.special : {
+      id: uuid(),
+      day: preselectedDate.getDay(),
+      date: preselectedDate,
+      dateString: preselectedDate.toDateString(),
+      // if we don't have a special schedule for this date, start with the recurring times as a base
+      times: withEvent && withEvent.recurring ? withEvent.recurring.times : [{id: uuid(), time: START_TIME, length: 1}],
+    }
+
+    const [event, setEvent] = useState(withEvent && withEvent.special ? specialEvent : recurringEvent)
+    const [recurring, setRecurring] = useState(withEvent && withEvent.special ? 0 : 1)
     const date = preselectedDate.getDate()
     const dateString = preselectedDate.toDateString()
     const bookedStartTimes = prebookedSessions.map(sesh => Number(sesh.time))
+
+    const lastSession = event.times[event.times.length-1]
+    const roomForAnotherSession = Number(lastSession.time) + Number(lastSession.length) + 0.5 <= END_TIME
 
     const handleAddSlotPicker = () => {
       const lastSlot = event.times[event.times.length-1]
@@ -331,8 +349,11 @@ const AvailabilityForm = ({
 
           <label>Frequency
             <select 
-            value={event.type}
-            onChange={(e) => setRecurring(e.target.value)}>
+            value={recurring}
+            onChange={(e) => {
+              setRecurring(e.target.value)
+              setEvent(e.target.value > 0 ? recurringEvent : specialEvent)
+              }}>
               <option value={1}>Every {DAYS_LONG[event.day]}</option>
               <option value={0}>Just today ({dateString})</option>
             </select>
@@ -346,7 +367,11 @@ const AvailabilityForm = ({
               event={event} 
               setEvent={setEvent}/>)}
           
-          <button onClick={handleAddSlotPicker}> Add Slot +</button>
+          <button 
+            onClick={handleAddSlotPicker} 
+            disabled={!roomForAnotherSession}>
+            Add Slot +
+          </button>
   
           {withEvent ? (
               <Fragment>
@@ -419,7 +444,8 @@ const Grid = ({ date, bookedSessions, availability, specialAvailability, setView
   for (let i = 0; i < DAYS_IN_WEEK; i++) {
     const date = new Date(startingDate)
     const dateBookedSessions = findEventsForDate(bookedSessions, date.toDateString())
-    const dateAvailability = findAvailabilityForDate(availability, specialAvailability, date.toDateString(), date.getDay())
+    const dateAvailabilityObject = findAvailabilityForDate(availability, specialAvailability, date.toDateString(), date.getDay())
+    const dateAvailability = dateAvailabilityObject.special ?? dateAvailabilityObject.recurring
     const bookedStartTimes = dateBookedSessions.map(sesh => Number(sesh.time))
     const availableSlots = dateAvailability ? dateAvailability.times.filter(s => !bookedStartTimes.includes(Number(s.time))) : []
     const displayEvents = dateBookedSessions.filter(sesh => user.admin || sesh.user.id == user.id).map(event => 
@@ -433,7 +459,7 @@ const Grid = ({ date, bookedSessions, availability, specialAvailability, setView
     dates.push({ 
       date, 
       bookedSessions: dateBookedSessions, 
-      availability: dateAvailability, 
+      availability: dateAvailabilityObject, 
       availableSlots: availableSlots, 
       displayEvents: displayEvents })
     startingDate.setDate(startingDate.getDate() + 1)
@@ -454,14 +480,14 @@ const Grid = ({ date, bookedSessions, availability, specialAvailability, setView
                 {date.date >= currentDate && date.availableSlots.length > 0 &&
                     <a 
                         className="addEventOnDay" 
-                        onClick={() => setShowingEventForm({ visible: true, preselectedDate: date.date, dateAvailability: date.availability, prebookedSessions: date.bookedSessions })}>
+                        onClick={() => setShowingEventForm({ visible: true, preselectedDate: date.date, dateAvailability: date.availability.special ?? date.availability.recurring, prebookedSessions: date.bookedSessions })}>
                         Add Session +
                     </a>}
                 {user.admin && date.date >= currentDate &&
                     <a 
                         className="addEventOnDay" 
                         onClick={() => setShowingAvailabilityForm({ visible: true, withEvent: date.availability, preselectedDate: date.date, prebookedSessions: date.bookedSessions })}>
-                        {date.availability ? 
+                        {date.availability.recurring || date.availability.special ? 
                         `${date.availableSlots.length} slots available` :
                          "Add Availability +"}
                     </a>}
@@ -476,9 +502,12 @@ const Grid = ({ date, bookedSessions, availability, specialAvailability, setView
 
 // The "main" component, our actual calendar
 const Calendar = ({ 
-    loadedBookedSessions = [], 
-    loadedAvailability = [], 
-    loadedSpecialAvailability = [],
+    bookedSessions, 
+    setBookedSessions,
+    availability, 
+    setAvailability,
+    specialAvailability,
+    setSpecialAvailability,
     user, 
     users }) => {
   const [date, setDate] = useState(new Date())
@@ -487,9 +516,6 @@ const Calendar = ({
   const [showingAvailabilityForm, setShowingAvailabilityForm] = useState( { visible: false })
   const [isLoading, setIsLoading] = useState(false)
   const [feedback, setFeedback] = useState()
-  const [bookedSessions, setBookedSessions] = useState(loadedBookedSessions)
-  const [availability, setAvailability] = useState(loadedAvailability)
-  const [specialAvailability, setSpecialAvailability] = useState(loadedSpecialAvailability)
 
   const showFeedback = ({ message, type, timeout = 1000 }) => {
     setFeedback({ message, type })

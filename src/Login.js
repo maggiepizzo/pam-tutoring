@@ -6,17 +6,23 @@ const Login = ({users, setToken, setView}) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [feedback, setFeedback] = useState();
+    var bcrypt = require('bcryptjs');
 
     const handleLogin = async e => {
-        console.log(users)
         e.preventDefault()
-        const matches = users.find(user => user.email === email && user.password === password)
-        if (!matches) {
-            setFeedback("Incorrect email or password")
+        const user = users.find(user => user.email === email)
+        if (!user) {
+            setFeedback("No account assosciated with this email address.  First time here?  Create an account.")
         } else {
-            setFeedback("Logging you in...")
-            setToken(matches)
-            setView('home')
+            bcrypt.compare(password, user.password).then(function(result) {
+                if (result == true) {
+                    setFeedback("Logging you in...")
+                    setToken(user)
+                    setView('home')
+                } else {
+                    setFeedback("Incorrect password.")
+                }
+            });      
         }
     }
 

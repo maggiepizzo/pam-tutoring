@@ -10,6 +10,9 @@ const CreateAccount = ({users, setUsers}) => {
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
     const [feedback, setFeedback] = useState();
+    
+    var bcrypt = require('bcryptjs');
+    const saltRounds = 10;
 
     const handleCreateAccount = async e => {
         e.preventDefault()
@@ -23,23 +26,25 @@ const CreateAccount = ({users, setUsers}) => {
             setFeedback("Passwords don't match.")
         } else {
             setFeedback("Creating new account...")
-            const user = {
+            bcrypt.hash(password1, saltRounds).then(function(hash) {
+                const user = {
                 "id": email1,
                 "email": email1,
-                "password": password1,
+                "password": hash,
                 "admin": false,
                 "name": firstName + " " + lastName,
                 "rate": 100
-            }
-            fetch('http://localhost:5000/users', {
-                method: 'POST',
-                headers: {
-                'Content-type': 'application/json',
-                },
-                body: JSON.stringify(user),
+                }
+                fetch('http://localhost:5000/users', {
+                    method: 'POST',
+                    headers: {
+                    'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify(user),
+                })
+                .then(setUsers(users.concat([user])))
+                .then(setFeedback("Successfully created account!  Navigate to the Login tab to log in."))
             })
-            .then(setUsers(users.concat([user])))
-            .then(setFeedback("Successfully created account!  Navigate to the Login tab to log in."))
         }
     }
 
@@ -79,5 +84,6 @@ const CreateAccount = ({users, setUsers}) => {
       </form>
     )
   }
+
 
   export default CreateAccount;
