@@ -43,7 +43,7 @@
         "email": "maggie.pizzo@gmail.com",
         "name": "Maggie Pizzo"
       },
-      "paid": false
+      "paid": true
     },
     {
       "id": "e50982fd-0ac4-40df-b150-21d998cd8768",
@@ -66,21 +66,6 @@
       "day": 4,
       "date": "2023-04-13T07:00:00.000Z",
       "dateString": "Thu Apr 13 2023",
-      "time": "10",
-      "length": 1,
-      "user": {
-        "id": "friedmandavid10@gmail.com",
-        "email": "friedmandavid10@gmail.com",
-        "name": "David Friedman"
-      },
-      "paid": true
-    },
-    {
-      "id": "1aeea30d-840d-4478-a9c7-68547722c745",
-      "type": "in-person",
-      "day": 5,
-      "date": "2023-04-14T07:00:00.000Z",
-      "dateString": "Fri Apr 14 2023",
       "time": "10",
       "length": 1,
       "user": {
@@ -117,36 +102,6 @@
         "id": "friedmandavid10@gmail.com",
         "email": "friedmandavid10@gmail.com",
         "name": "David Friedman"
-      },
-      "paid": true
-    },
-    {
-      "id": "5a76b709-55ec-41b1-9c85-dde4b60f6da0",
-      "type": "in-person",
-      "day": 5,
-      "date": "2023-04-14T07:00:00.000Z",
-      "dateString": "Fri Apr 14 2023",
-      "time": 8,
-      "length": 1,
-      "user": {
-        "id": "maggie.pizzo@gmail.com",
-        "email": "maggie.pizzo@gmail.com",
-        "name": "Maggie Pizzo"
-      },
-      "paid": false
-    },
-    {
-      "id": "ceff3892-5098-4edc-b0e3-beca324763b8",
-      "type": "remote",
-      "day": 5,
-      "date": "2023-04-14T07:00:00.000Z",
-      "dateString": "Fri Apr 14 2023",
-      "time": "11",
-      "length": 1,
-      "user": {
-        "id": "maggie.pizzo@gmail.com",
-        "email": "maggie.pizzo@gmail.com",
-        "name": "Maggie Pizzo"
       },
       "paid": true
     }
