@@ -27,17 +27,17 @@ const Login = ({users, setToken, setView}) => {
     }
 
     return(
-        <form className='Login-container' onSubmit={handleLogin}>
+        <form className='loginContainer' onSubmit={handleLogin}>
             <h1>Welcome to Pam's Tutoring.</h1>
             <h2>Log in to continue.</h2>
             <input
                 type="text"
-                className='Login-field'
+                className='loginField'
                 placeholder='Email'
                 onChange={(e) => setEmail(e.target.value)}
             />
             <PasswordField placeholder={"Password"} onChange={e => setPassword(e.target.value)}/>
-            <button className="Login-button">Log in</button>
+            <button className="loginButton">Log in</button>
             <div>
                 {feedback && feedback}
             </div>

@@ -3,6 +3,7 @@ import Calendar from './Calendar.js';
 import Login from './Login.js';
 import CreateAccount from './CreateAccount.js'
 import Payments from './Payments.js'
+import HomePage from './HomePage.js'
 import './App.css';
 
 function setToken(userToken) {
@@ -13,23 +14,6 @@ function getToken() {
   const tokenString = sessionStorage.getItem('token')
   const userToken = JSON.parse(tokenString)
   return userToken
-}
-
-const HomePage = () => {
-  return (
-    <div>
-    <div className="homePageHeader">
-      <img  src={require('./pam.jpg')} alt="Image of Pam"/>
-      <h1>Hi, I'm Pam!</h1>
-    </div>
-    <p>
-      For over 20 years, I have been nourishing the minds of today and tomorrow to find success and a love of learning.
-      I am a passionate teacher and tutor, covering subjects including math, science, and German.  I teach students of
-      all ages and abilities, from young childhood to college.  If you already work with me, please log in to see your schedule and book appointments.
-      Otherwise, feel free to get in touch to talk more about how we can work together, or sign up to create an account!
-    </p>
-    </div>
-  )
 }
 
 function App() {
@@ -66,22 +50,22 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-       <button className='Home-button' onClick={() => setView('home')}>Pam's Tutoring</button>
+      <header className="appHeader">
+       <button className='homeButton' onClick={() => setView('home')}>Pam's Tutoring</button>
         {user !== null ? 
-        <div className="Tab-container">
+        <div className="tabContainer">
           <button 
-            className={view === 'schedule' ? "Tab Tab-selected" : "Tab"} 
+            className={view === 'schedule' ? "tab tabSelected" : "tab"} 
             onClick={() => setView('schedule')}>
               My Schedule
           </button>
           <button 
-            className={view === 'payments' ? "Tab Tab-selected" : "Tab"} 
+            className={view === 'payments' ? "tab tabSelected" : "tab"} 
             onClick={() => setView('payments')}>
               Payments
           </button>
           <button 
-            className="Tab" 
+            className="tab" 
             onClick={() => {
               sessionStorage.clear() 
               getToken()
@@ -91,21 +75,21 @@ function App() {
           </button>
         </div>
         :
-        <div className="Tab-container">
+        <div className="tabContainer">
           <button 
-            className={view === 'login' ? "Tab Tab-selected" : "Tab"} 
+            className={view === 'login' ? "tab tabSelected" : "tab"} 
             onClick={() => setView('login')}>
               Log in
           </button>
           <button 
-            className={view === 'signup' ? "Tab Tab-selected" : "Tab"} 
+            className={view === 'signup' ? "tab tabSelected" : "tab"} 
             onClick={() => setView('createAccount')}>
               Create account
           </button>
         </div>}
       </header>
 
-      <div className='Calendar-container'>
+      <div className='calendarContainer'>
         {view === 'schedule' && <Calendar 
           bookedSessions={bookedSessions} 
           setBookedSessions={setBookedSessions}

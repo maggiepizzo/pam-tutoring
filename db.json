@@ -28,7 +28,7 @@
         "email": "maggie.pizzo@gmail.com",
         "name": "Maggie Pizzo"
       },
-      "paid": false
+      "paid": true
     },
     {
       "id": "307cff5b-a52f-473b-8615-30304849e310",
@@ -471,7 +471,7 @@
       "password": "$2a$10$WBuxfWiwzcHLp1Rvo2Gj6OxfBjGO.2vqOcC37lL0yLxXx.I/dt.qS",
       "admin": false,
       "name": "Maggie Pizzo",
-      "rate": 60
+      "rate": 90
     },
     {
       "id": "friedmandavid10@gmail.com",

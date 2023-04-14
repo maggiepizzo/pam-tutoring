@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import showEye from './show-password.svg';
-import hideEye from './hide-password.svg';
+import showEye from './images/show-password.svg';
+import hideEye from './images/hide-password.svg';
 import './App.css';
 
 const PasswordField = ({placeholder, onChange}) => {
@@ -10,7 +10,7 @@ const PasswordField = ({placeholder, onChange}) => {
         <div className='passwordContainer'>
             <input
                 type={showPassword ? "text" : "password"}
-                className='Login-field'
+                className='loginField'
                 placeholder={placeholder}
                 onChange={onChange}
             />            

@@ -49,35 +49,35 @@ const CreateAccount = ({users, setUsers}) => {
     }
 
     return (
-      <form className='Login-container' onSubmit={handleCreateAccount}>
+      <form className='loginContainer' onSubmit={handleCreateAccount}>
           <h1>Create an account.</h1>
           <input
               type="text"
-              className='Login-field'
+              className='loginField'
               placeholder='First Name'
               onChange={(e) => setFirstName(e.target.value)}
           />
           <input
               type="text"
-              className='Login-field'
+              className='loginField'
               placeholder='Last Name'
               onChange={(e) => setLastName(e.target.value)}
           />
           <input
               type="text"
-              className='Login-field'
+              className='loginField'
               placeholder='Email'
               onChange={(e) => setEmail1(e.target.value)}
           />
           <input
               type="text"
-              className='Login-field'
+              className='loginField'
               placeholder='Re-enter email'
               onChange={(e) => setEmail2(e.target.value)}
           />
           <PasswordField placeholder={"Password"} onChange={(e) => setPassword1(e.target.value)} />
           <PasswordField placeholder={'Re-enter password'} onChange={(e) => setPassword2(e.target.value)}/>
-          <button className="Login-button">Create Account</button>
+          <button className="loginButton">Create Account</button>
           <div>
                 {feedback && feedback}
             </div>
