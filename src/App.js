@@ -3,7 +3,7 @@ import Calendar from './Calendar.js';
 import Login from './Login.js';
 import CreateAccount from './CreateAccount.js'
 import Payments from './Payments.js'
-import HomePage from './HomePage.js'
+import HomePage from './HomePage'
 import './App.css';
 
 function setToken(userToken) {
