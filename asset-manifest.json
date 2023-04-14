@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/pam-tutoring/static/css/main.7a4bce7a.css",
+    "main.js": "/pam-tutoring/static/js/main.87c32050.js",
+    "static/js/787.e7218c79.chunk.js": "/pam-tutoring/static/js/787.e7218c79.chunk.js",
+    "static/media/pam.jpg": "/pam-tutoring/static/media/pam.082ca114e9aec9ffbd87.jpg",
+    "static/media/hide-password.svg": "/pam-tutoring/static/media/hide-password.2aaf769dde9be37e683f78d543bb61d8.svg",
+    "index.html": "/pam-tutoring/index.html",
+    "static/media/show-password.svg": "/pam-tutoring/static/media/show-password.7468b27017e6d779e083dd0beabf4efa.svg",
+    "main.7a4bce7a.css.map": "/pam-tutoring/static/css/main.7a4bce7a.css.map",
+    "main.87c32050.js.map": "/pam-tutoring/static/js/main.87c32050.js.map",
+    "787.e7218c79.chunk.js.map": "/pam-tutoring/static/js/787.e7218c79.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7a4bce7a.css",
+    "static/js/main.87c32050.js"
+  ]
+}
