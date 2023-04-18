@@ -134,6 +134,21 @@
         "name": "Maggie Pizzo"
       },
       "paid": false
+    },
+    {
+      "id": "e1a52750-bae5-42dd-954b-25b687e8db3a",
+      "type": "in-person",
+      "day": 5,
+      "date": "2023-04-14T07:00:00.000Z",
+      "dateString": "Fri Apr 14 2023",
+      "time": "11",
+      "length": 1,
+      "user": {
+        "id": "friedmandavid10@gmail.com",
+        "email": "friedmandavid10@gmail.com",
+        "name": "David Friedman"
+      },
+      "paid": false
     }
   ],
   "availability": [

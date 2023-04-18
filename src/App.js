@@ -5,47 +5,61 @@ import CreateAccount from './CreateAccount.js'
 import Payments from './Payments.js'
 import HomePage from './HomePage'
 import './App.css';
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getFirestore, collection, onSnapshot, getDoc, doc } from "firebase/firestore";
 
-function setToken(userToken) {
-  sessionStorage.setItem('token', JSON.stringify(userToken));
-}
+// Web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAR4G4EA_BWurG7udTKWEyCU_g_N2_E3vE",
+  authDomain: "pam-tutoring.firebaseapp.com",
+  databaseURL: "https://pam-tutoring.firebaseio.com",
+  projectId: "pam-tutoring",
+  storageBucket: "pam-tutoring.appspot.com",
+  messagingSenderId: "476525246267",
+  appId: "1:476525246267:web:023ca3ce9b77a43c0ea91e",
+  measurementId: "G-QG4QS48NTY"
+};
 
-function getToken() {
-  const tokenString = sessionStorage.getItem('token')
-  const userToken = JSON.parse(tokenString)
-  return userToken
-}
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app)
+const db = getFirestore(app)
 
 function App() {
-  const user = getToken()
+  const [user, setUser] = useState(null)
   const [view, setView] = useState('home');
   const [bookedSessions, setBookedSessions] = useState([]);
   const [availability, setAvailability] = useState([])
   const [specialAvailability, setSpecialAvailability] = useState([])
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    fetch('http://localhost:5000/users/')
-    .then(res => res.json())
-    .then(result => setUsers(result))
+  useEffect(() => { 
+    onSnapshot(collection(db, 'users'), (snapshot) => {
+      setUsers(snapshot.docs.map(doc => doc.data()))
+    })
+
+    onSnapshot(collection(db, 'sessions'), (snapshot) => {
+      setBookedSessions(snapshot.docs.map(doc => doc.data()))
+    })
+
+    onSnapshot(collection(db, 'availability'), (snapshot) => {
+      setAvailability(snapshot.docs.map(doc => doc.data()))
+    })
+
+    onSnapshot(collection(db, 'specialAvailability'), (snapshot) => {
+      setSpecialAvailability(snapshot.docs.map(doc => doc.data()))
+    })
   }, [])
 
   useEffect(() => {
-    fetch('http://localhost:5000/sessions/')
-    .then(res => res.json())
-    .then(result => {setBookedSessions(result)})
-  }, [])
-
-  useEffect(() => {
-    fetch('http://localhost:5000/availability/')
-    .then(res => res.json())
-    .then(result => {setAvailability(result)})
-  }, [])
-
-  useEffect(() => {
-    fetch('http://localhost:5000/specialAvailability/')
-    .then(res => res.json())
-    .then(result => {setSpecialAvailability(result)})
+    onAuthStateChanged(auth, (user) => {
+      if (user === null) {
+        setUser(null)
+      } else {
+        getDoc(doc(db, 'users', user.uid)).then((document) => setUser(document.data() ?? null))
+      }
+    })
   }, [])
 
   return (
@@ -67,10 +81,9 @@ function App() {
           <button 
             className="tab" 
             onClick={() => {
-              sessionStorage.clear() 
-              getToken()
-              setView('logout')
-              }}>
+              signOut(auth)
+              .then(() => {setView('home')})
+              .catch((error) => {console.error(error)})}}>
               Log out
           </button>
         </div>
@@ -98,16 +111,13 @@ function App() {
           specialAvailability={specialAvailability}
           setSpecialAvailability={setSpecialAvailability}
           user={user} 
-          users={users}/>}
+          users={users}
+          db={db}/>}
         {view === 'payments' && <Payments bookedSessions={bookedSessions} setBookedSessions={setBookedSessions} user={user} users={users} setUsers={setUsers}/>}
         {view === 'home' && user &&  <p> Hi, {user.name}!  Use the buttons above to navigate to your schedule and payments.</p>}
         {view === 'home' && !user && <HomePage/>}
-        {view === 'login' && <Login 
-          users={users} 
-          setToken={setToken} 
-          setView={setView} />}
-        {view === 'createAccount' && <CreateAccount users={users} setUsers={setUsers}/>}
-        {view === 'logout' && <p> Goodbye! </p>}
+        {view === 'login' && <Login auth={auth} setView={setView} />}
+        {view === 'createAccount' && <CreateAccount auth={auth} users={users} setUsers={setUsers} setView={setView} db={db}/>}
       </div>
     </div>
   );

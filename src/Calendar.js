@@ -3,7 +3,7 @@ import { useState, Fragment } from 'react';
 import { v4 as uuid } from 'uuid';
 import './Calendar.css'
 import { typeString, timeString, lengthString } from './utils';
-import { last } from 'lodash';
+import { doc, setDoc, deleteDoc } from "firebase/firestore"; 
 
 const MONTHS = [
   "January",
@@ -307,23 +307,23 @@ const AvailabilityForm = ({
       editAvailability, 
       addSpecialAvailability  }) => {
 
-    const recurringEvent = withEvent && withEvent.recurring ? withEvent.recurring : {
+    const recurringEvent = withEvent.recurring ? withEvent.recurring : {
         id: uuid(),
         day: preselectedDate.getDay(),
         times: [{id: uuid(), time: START_TIME, length: 1}],
     }
 
-    const specialEvent = withEvent && withEvent.special ? withEvent.special : {
+    const specialEvent = withEvent.special ? withEvent.special : {
       id: uuid(),
       day: preselectedDate.getDay(),
       date: preselectedDate,
       dateString: preselectedDate.toDateString(),
       // if we don't have a special schedule for this date, start with the recurring times as a base
-      times: withEvent && withEvent.recurring ? withEvent.recurring.times : [{id: uuid(), time: START_TIME, length: 1}],
+      times: withEvent.recurring ? withEvent.recurring.times : [{id: uuid(), time: START_TIME, length: 1}],
     }
 
-    const [event, setEvent] = useState(withEvent && withEvent.special ? specialEvent : recurringEvent)
-    const [recurring, setRecurring] = useState(withEvent && withEvent.special ? 0 : 1)
+    const [event, setEvent] = useState(withEvent.special ? specialEvent : recurringEvent)
+    const [recurring, setRecurring] = useState(withEvent.special ? 0 : 1)
     const date = preselectedDate.getDate()
     const dateString = preselectedDate.toDateString()
     const bookedStartTimes = prebookedSessions.map(sesh => Number(sesh.time))
@@ -373,25 +373,15 @@ const AvailabilityForm = ({
             Add Slot +
           </button>
   
-          {withEvent ? (
-              <Fragment>
-              <button onClick={() => recurring > 0 ? editAvailability(event) : addSpecialAvailability(event, preselectedDate)} disabled={event == withEvent}>
-                Save Availability
-              </button>
-              <a className="close" onClick={() => {
-                  setShowingAvailabilityForm({ visible: false })}
-              }/>
-            </Fragment>
-          ) : (
-              <Fragment>
-              <button onClick={() => recurring > 0 ? addAvailability(event) : addSpecialAvailability(event, preselectedDate)}>
-                Set Availability
-              </button>
-              <a className="close" onClick={() => {
-                  setShowingAvailabilityForm({ visible: false })}
-              }/>
-            </Fragment>
-          )}
+          <Fragment>
+            <button onClick={() => recurring > 0 ? (withEvent.recurring ? editAvailability(event) : addAvailability(event)) : (withEvent.special ? addSpecialAvailability(event, preselectedDate) : addSpecialAvailability(event, preselectedDate))} disabled={event == withEvent} >
+              Save Availability
+            </button>
+            <a className="close" onClick={() => {
+                setShowingAvailabilityForm({ visible: false })}
+            }/>
+          </Fragment>
+
         </div>
       </Modal>
     )
@@ -509,7 +499,8 @@ const Calendar = ({
     specialAvailability,
     setSpecialAvailability,
     user, 
-    users }) => {
+    users,
+    db }) => {
   const [date, setDate] = useState(new Date())
   const [viewingEvent, setViewingEvent] = useState(null)
   const [showingEventForm, setShowingEventForm] = useState({ visible: false })
@@ -535,120 +526,79 @@ const Calendar = ({
       event.id = uuid()
       event.date = date
       event.dateString = date.toDateString()
-      fetch('http://localhost:5000/specialAvailability', {
-          method: 'POST',
-          headers: {
-          'Content-type': 'application/json',
-          },
-          body: JSON.stringify(event),
-      })
+      setDoc(doc(db, "specialAvailability", event.id), event)
       .then(() => {
-          setSpecialAvailability(specialAvailability.concat([event]))
-          setIsLoading(false)
-          showFeedback({ message: "Availability added", type: "success" })
+        setSpecialAvailability(specialAvailability.concat([event]))
+        setIsLoading(false)
+        showFeedback({ message: "Availability added", type: "success" })
       })
-
     }
   }
 
   const editSpecialAvailability = (event) => {
     setIsLoading(true)
     setShowingAvailabilityForm({ visible: false })
-    fetch('http://localhost:5000/specialAvailability' + '/' + event.id, {
-        method: 'PUT',
-        headers: {
-        'Content-type': 'application/json',
-        },
-        body: JSON.stringify(event),
-    })
+    setDoc(doc(db, "specialAvailability", event.id), event)
     .then(() => {
-        setSpecialAvailability(specialAvailability.map(e =>  e.id === event.id ? event : e))
-        setIsLoading(false)
-        showFeedback({ message: "Availability saved", type: "success" })
+      setSpecialAvailability(specialAvailability.map(e =>  e.id === event.id ? event : e))
+      setIsLoading(false)
+      showFeedback({ message: "Availability saved", type: "success" })
     })
   }
 
   const addAvailability = (event) => {
     setIsLoading(true)
     setShowingAvailabilityForm({ visible: false })
-    fetch('http://localhost:5000/availability', {
-        method: 'POST',
-        headers: {
-        'Content-type': 'application/json',
-        },
-        body: JSON.stringify(event),
-    })
+    setDoc(doc(db, "availability", event.id), event)
     .then(() => {
-        setAvailability(availability.concat([event]))
-        setIsLoading(false)
-        showFeedback({ message: "Availability added", type: "success" })
+      setAvailability(availability.concat([event]))
+      setIsLoading(false)
+      showFeedback({ message: "Availability added", type: "success" })
     })
+    .catch((error) => console.error(error))
   }
 
   const editAvailability = (event) => {
     setIsLoading(true)
     setShowingAvailabilityForm({ visible: false })
-    fetch('http://localhost:5000/availability' + '/' + event.id, {
-        method: 'PUT',
-        headers: {
-        'Content-type': 'application/json',
-        },
-        body: JSON.stringify(event),
-    })
+    setDoc(doc(db, "availability", event.id), event)
     .then(() => {
-        setAvailability(availability.map(e =>  e.id === event.id ? event : e))
-        setIsLoading(false)
-        showFeedback({ message: "Availability saved", type: "success" })
+      setAvailability(availability.map(e =>  e.id === event.id ? event : e))
+      setIsLoading(false)
+      showFeedback({ message: "Availability saved", type: "success" })
     })
   }
 
   const addSession = (event) => {
     setIsLoading(true)
     setShowingEventForm({ visible: false })
-    fetch('http://localhost:5000/sessions', {
-        method: 'POST',
-        headers: {
-        'Content-type': 'application/json',
-        },
-        body: JSON.stringify(event),
-    })
+    setDoc(doc(db, "sessions", event.id), event)
     .then(() => {
-        setBookedSessions(bookedSessions.concat([event]))
-        setIsLoading(false)
-        showFeedback({ message: "New session scheduled", type: "success" })
+      setBookedSessions(bookedSessions.concat([event]))
+      setIsLoading(false)
+      showFeedback({ message: "New session scheduled", type: "success" })
     })
   }
 
   const editSession = (event) => {
     setIsLoading(true)
     setShowingEventForm({ visible: false })
-    fetch('http://localhost:5000/sessions' + '/' + event.id, {
-        method: 'PUT',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify(event),
-      })
-      .then(() => {
-        setBookedSessions(bookedSessions.map(e =>  e.id === event.id ? event : e))
-        setIsLoading(false)
-        showFeedback({ message: "Session saved", type: "success" })
+    setDoc(doc(db, "sessions", event.id), event)
+    .then(() => {
+      setBookedSessions(bookedSessions.map(e =>  e.id === event.id ? event : e))
+      setIsLoading(false)
+      showFeedback({ message: "Session saved", type: "success" })
     })
   }
 
   const deleteSession = (event) => {
     setIsLoading(true)
     setViewingEvent(null)
-    fetch('http://localhost:5000/sessions' + '/' + event.id, {
-        method: 'DELETE',
-        headers: {
-          'Content-type': 'application/json',
-        },
-      })
-      .then(() => {
-        setBookedSessions(bookedSessions.filter(e =>  e.id !== event.id))
-        setIsLoading(false)
-        showFeedback({ message: "Session deleted", type: "success" })
+    deleteDoc(doc(db, "sessions", event.id))
+    .then(() => {
+      setBookedSessions(bookedSessions.filter(e =>  e.id !== event.id))
+      setIsLoading(false)
+      showFeedback({ message: "Session deleted", type: "success" })
     })
   }
 

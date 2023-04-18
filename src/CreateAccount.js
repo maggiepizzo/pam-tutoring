@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { createUserWithEmailAndPassword,  updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore"; 
 import PasswordField from './PasswordField.js';
 import './App.css';
 
-const CreateAccount = ({users, setUsers}) => {
+const CreateAccount = ({auth, users, setUsers, setView, db}) => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [email1, setEmail1] = useState("");
@@ -10,9 +12,6 @@ const CreateAccount = ({users, setUsers}) => {
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
     const [feedback, setFeedback] = useState();
-    
-    var bcrypt = require('bcryptjs');
-    const saltRounds = 10;
 
     const handleCreateAccount = async e => {
         e.preventDefault()
@@ -20,36 +19,33 @@ const CreateAccount = ({users, setUsers}) => {
             setFeedback("Fill in all required fields.")
         } else if (email1 !== email2) {
             setFeedback("Email addresses don't match.")
-        } else if (users.find(user => user.email === email1)) {
-            setFeedback("An account with this email address already exists.  Try logging in.")
         } else if (password1 !== password2) {
             setFeedback("Passwords don't match.")
         } else {
             setFeedback("Creating new account...")
-            bcrypt.hash(password1, saltRounds).then(function(hash) {
-                const user = {
-                "id": email1,
-                "email": email1,
-                "password": hash,
-                "admin": false,
-                "name": firstName + " " + lastName,
-                "rate": 100
-                }
-                fetch('http://localhost:5000/users', {
-                    method: 'POST',
-                    headers: {
-                    'Content-type': 'application/json',
-                    },
-                    body: JSON.stringify(user),
-                })
-                .then(setUsers(users.concat([user])))
-                .then(setFeedback("Successfully created account!  Navigate to the Login tab to log in."))
-            })
+            createUserWithEmailAndPassword(auth, email1, password1)
+            .then((userCredential) => {
+                updateProfile(userCredential.user, {displayName: firstName + " " + lastName})
+                .then(() => {
+                    const userObject = {
+                        id: userCredential.user.uid,
+                        email: userCredential.user.email,
+                        admin: false,
+                        name: userCredential.user.displayName,
+                        rate: 100
+                    }
+                    setDoc(doc(db, "users", userCredential.user.uid), userObject);
+                    setUsers(users.concat([userObject]))
+                    setView('home')
+                }).catch((error) =>  console.error(error))
+            }).catch((error) => {
+                console.error(error)
+                setFeedback("Could not create account.  Please try again.")})       
         }
     }
 
     return (
-      <form className='loginContainer' onSubmit={handleCreateAccount}>
+      <form className='loginContainer' onSubmit={(e) => handleCreateAccount(e)}>
           <h1>Create an account.</h1>
           <input
               type="text"
