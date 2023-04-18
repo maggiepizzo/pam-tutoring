@@ -103,6 +103,8 @@ function App() {
       </header>
 
       <div className='calendarContainer'>
+        {view === 'home' && user &&  <p> Hi, {user.name}!  Use the buttons above to navigate to your schedule and payments.</p>}
+        {view === 'home' && !user && <HomePage/>}
         {view === 'schedule' && <Calendar 
           bookedSessions={bookedSessions} 
           setBookedSessions={setBookedSessions}
@@ -113,9 +115,7 @@ function App() {
           user={user} 
           users={users}
           db={db}/>}
-        {view === 'payments' && <Payments bookedSessions={bookedSessions} setBookedSessions={setBookedSessions} user={user} users={users} setUsers={setUsers}/>}
-        {view === 'home' && user &&  <p> Hi, {user.name}!  Use the buttons above to navigate to your schedule and payments.</p>}
-        {view === 'home' && !user && <HomePage/>}
+        {view === 'payments' && <Payments bookedSessions={bookedSessions} setBookedSessions={setBookedSessions} user={user} users={users} setUsers={setUsers} db={db}/>}
         {view === 'login' && <Login auth={auth} setView={setView} />}
         {view === 'createAccount' && <CreateAccount auth={auth} users={users} setUsers={setUsers} setView={setView} db={db}/>}
       </div>

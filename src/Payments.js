@@ -2,44 +2,35 @@ import { useState } from 'react';
 import './App.css';
 import './Payments.css';
 import { typeString, timeString, lengthString } from './utils';
+import { doc, updateDoc } from "firebase/firestore"; 
 
 const Row = ({children}) => {
     return <li className='row'>{children}</li>
 }
 
-const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers}) => {
+const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}) => {
     const [currentUserId, setCurrentUserId] = useState(user.id)
     const [rate, setRate] = useState(users.find(u => u.id === currentUserId).rate)
     const [changeRate, setChangeRate] = useState(false)
 
     const handleCheckPaid = (e) => {
         const sesh = bookedSessions.find(s => s.id === e.target.value)
-        const newSesh = {...sesh, paid: !sesh.paid}
-        fetch('http://localhost:5000/sessions' + '/' + sesh.id, {
-        method: 'PUT',
-        headers: {
-        'Content-type': 'application/json',
-        },
-        body: JSON.stringify(newSesh),
+        updateDoc(doc(db, "sessions", sesh.id), {
+            paid: !sesh.paid
         })
         .then(() => {
-            setBookedSessions(bookedSessions.map(s => s.id === sesh.id ? newSesh : s))
+            setBookedSessions(bookedSessions.map(s => s.id === sesh.id ? {...s, paid: !s.paid} : s))
         })
     }
 
     const handleChangeRate = (e) => {
         if (changeRate){
-            const currentUser = users.find(u => u.id === currentUserId)
-            const newUser = {...currentUser, rate: Number(e.target.value)}
-            fetch('http://localhost:5000/users' + '/' + currentUserId, {
-            method: 'PUT',
-            headers: {
-            'Content-type': 'application/json',
-            },
-            body: JSON.stringify(newUser),
+            const newRate = Number(e.target.value)
+            updateDoc(doc(db, "users", currentUserId), {
+                rate: newRate
             })
             .then(() => {
-                setUsers(users.map(u => u.id === currentUserId ? newUser : u))
+                setUsers(users.map(u => u.id === currentUserId ? {...u, rate: newRate} : u))
             })
         }
         setChangeRate(!changeRate)
