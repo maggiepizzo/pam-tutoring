@@ -305,7 +305,8 @@ const AvailabilityForm = ({
       withEvent, 
       addAvailability,
       editAvailability, 
-      addSpecialAvailability  }) => {
+      addSpecialAvailability,
+      editSpecialAvailability }) => {
 
     const recurringEvent = withEvent.recurring ? withEvent.recurring : {
         id: uuid(),
@@ -323,7 +324,7 @@ const AvailabilityForm = ({
     }
 
     const [event, setEvent] = useState(withEvent.special ? specialEvent : recurringEvent)
-    const [recurring, setRecurring] = useState(withEvent.special ? 0 : 1)
+    const [recurring, setRecurring] = useState(withEvent.special ? false : true)
     const date = preselectedDate.getDate()
     const dateString = preselectedDate.toDateString()
     const bookedStartTimes = prebookedSessions.map(sesh => Number(sesh.time))
@@ -351,11 +352,11 @@ const AvailabilityForm = ({
             <select 
             value={recurring}
             onChange={(e) => {
-              setRecurring(e.target.value)
-              setEvent(e.target.value > 0 ? recurringEvent : specialEvent)
+              setRecurring(!recurring)
+              setEvent(recurring ? specialEvent : recurringEvent) // swap the previous order (recurring not updated yet)
               }}>
-              <option value={1}>Every {DAYS_LONG[event.day]}</option>
-              <option value={0}>Just today ({dateString})</option>
+              <option value={true}>Every {DAYS_LONG[event.day]}</option>
+              <option value={false}>Just today ({dateString})</option>
             </select>
           </label>
 
@@ -372,9 +373,9 @@ const AvailabilityForm = ({
             disabled={!roomForAnotherSession}>
             Add Slot +
           </button>
-  
+
           <Fragment>
-            <button onClick={() => recurring > 0 ? (withEvent.recurring ? editAvailability(event) : addAvailability(event)) : (withEvent.special ? addSpecialAvailability(event, preselectedDate) : addSpecialAvailability(event, preselectedDate))} disabled={event == withEvent} >
+            <button onClick={() => recurring ? (withEvent.recurring ? editAvailability(event) : addAvailability(event)) : (withEvent.special ? editSpecialAvailability(event) : addSpecialAvailability(event))} disabled={event == withEvent} >
               Save Availability
             </button>
             <a className="close" onClick={() => {
@@ -515,24 +516,15 @@ const Calendar = ({
     }, timeout)
   }
 
-  const addSpecialAvailability = (event, date) => {
+  const addSpecialAvailability = (event) => {
     setIsLoading(true)
     setShowingAvailabilityForm({ visible: false })
-    const a = specialAvailability.find(a => a.id === event.id)
-    if (a) {
-      const newEvent = {...event, id: a.id}
-      editSpecialAvailability(newEvent)
-    } else {
-      event.id = uuid()
-      event.date = date
-      event.dateString = date.toDateString()
-      setDoc(doc(db, "specialAvailability", event.id), event)
-      .then(() => {
-        setSpecialAvailability(specialAvailability.concat([event]))
-        setIsLoading(false)
-        showFeedback({ message: "Availability added", type: "success" })
-      })
-    }
+    setDoc(doc(db, "specialAvailability", event.id), event)
+    .then(() => {
+      setSpecialAvailability(specialAvailability.concat([event]))
+      setIsLoading(false)
+      showFeedback({ message: "Availability added", type: "success" })
+    })
   }
 
   const editSpecialAvailability = (event) => {
@@ -671,6 +663,7 @@ const Calendar = ({
           addAvailability={addAvailability}
           editAvailability={editAvailability}
           addSpecialAvailability={addSpecialAvailability}
+          editSpecialAvailability={editSpecialAvailability}
         />
       }   
 
