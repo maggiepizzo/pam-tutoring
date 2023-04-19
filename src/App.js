@@ -37,21 +37,31 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => { 
-    onSnapshot(collection(db, 'users'), (snapshot) => {
+    const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
       setUsers(snapshot.docs.map(doc => doc.data()))
     })
+    return unsubscribe
+  }, [])
 
-    onSnapshot(collection(db, 'sessions'), (snapshot) => {
+  useEffect(() => { 
+    const unsubscribe = onSnapshot(collection(db, 'sessions'), (snapshot) => {
       setBookedSessions(snapshot.docs.map(doc => doc.data()))
     })
+    return unsubscribe
+  }, [])
 
-    onSnapshot(collection(db, 'availability'), (snapshot) => {
+  useEffect(() => { 
+    const unsubscribe = onSnapshot(collection(db, 'availability'), (snapshot) => {
       setAvailability(snapshot.docs.map(doc => doc.data()))
     })
+    return unsubscribe
+  }, [])
 
-    onSnapshot(collection(db, 'specialAvailability'), (snapshot) => {
-      setSpecialAvailability(snapshot.docs.map(doc => doc.data()))
-    })
+    
+  useEffect(() => { 
+    const unsubscribe = onSnapshot(collection(db, 'specialAvailability'), (snapshot) => {
+        setSpecialAvailability(snapshot.docs.map(doc => doc.data()))
+      })
   }, [])
 
   useEffect(() => {

@@ -211,6 +211,7 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
   const defaultTime = timeSlots[0].time
   const defaultLength = timeSlots[0].length
   const defaultType = 'in-person'
+  const [selectedUser, setSelectedUser] = useState(user.admin ? users[0] : user)
   
   const newEvent = withEvent || {
     id: uuid(),
@@ -220,7 +221,7 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
     dateString: preselectedDate.toDateString(), 
     time: defaultTime, 
     length: defaultLength,
-    user: {id: user.id, email: user.email, name: user.name},
+    user: {id: selectedUser.id, email: selectedUser.email, name: selectedUser.name},
     paid: false
   }
   const [event, setEvent] = useState(newEvent)
@@ -269,10 +270,11 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
             onChange={(e) => setEvent({ ...event, meta: e.target.value })} />
         </label>
 
-        {user.admin && <label>User
-          <select onChange={(e) => {
-            const newUser = users.find(u => e.target.value == u.id)
-            setEvent({ ...event, user: {id: newUser.id, email: newUser.email, name: newUser.name } })}}>
+        {user.admin && 
+        <label>User
+          <select 
+            value={selectedUser.id}
+            onChange={(e) => {setSelectedUser(users.find(u => e.target.value == u.id))}}>
             {users.map(u => <option value={u.id}>{u.name}</option>)}
           </select>
         </label>}
@@ -473,15 +475,15 @@ const Grid = ({ date, bookedSessions, availability, specialAvailability, setView
                     <a 
                         className="addEventOnDay" 
                         onClick={() => setShowingEventForm({ visible: true, preselectedDate: date.date, dateAvailability: date.availability.special ?? date.availability.recurring, prebookedSessions: date.bookedSessions })}>
-                        Add Session +
+                        Book Session
                     </a>}
                 {user.admin && date.date >= currentDate &&
                     <a 
                         className="addEventOnDay" 
                         onClick={() => setShowingAvailabilityForm({ visible: true, withEvent: date.availability, preselectedDate: date.date, prebookedSessions: date.bookedSessions })}>
                         {date.availability.recurring || date.availability.special ? 
-                        `${date.availableSlots.length} slots available` :
-                         "Add Availability +"}
+                        "Edit Availability" :
+                        "Add Availability +"}
                     </a>}
             </div>
             {date.displayEvents}

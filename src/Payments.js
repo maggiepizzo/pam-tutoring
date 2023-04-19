@@ -32,8 +32,10 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
         setChangeRate(!changeRate)
     }
 
-    const userMenu = users.filter(u => !user.admin || u.id !== user.id).map(u => {
-        return <option key={u.id} value={u.id}>{u.name}</option>})
+    const userMenu = users
+        .filter(u => !user.admin || u.id !== user.id)
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map(u => <option key={u.id} value={u.id}>{u.name}</option>)
 
     const header = 
         <Row key={"header"}>
@@ -46,6 +48,8 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
             {user.admin && <div key={"paid"} className='rowItem rowHeader'>Paid</div>}
         </Row>
 
+    const selectedSessions = bookedSessions.filter(sesh => (user.admin && user.id === currentUserId) || sesh.user.id == currentUserId)
+
     const totalDue = 
         <Row key={"totalDue"}>
             <div className='rowItem rowHeader'>Total Due:</div>
@@ -53,6 +57,7 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
                 ${users.find(u => u.id === currentUserId).rate * bookedSessions.filter(sesh => sesh.user.id === currentUserId && !sesh.paid).map(sesh => sesh.length).reduce((a,b) => a+b, 0)}
             </div>
         </Row>
+    
 
     return (
         <div>
@@ -70,25 +75,29 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
                 }
                 {user.id !== currentUserId && <button value={rate} className="editButton" onClick={handleChangeRate}>{changeRate ? "Save Rate" : "Change Rate"}</button>}
             </div>}
+
+            {selectedSessions.length > 0 ?
+                <ul className='gridContainer'>
+                    {header}
+                    {selectedSessions
+                        .map(sesh => {
+                        return <Row key={sesh.id}>
+                            <div key={"name"} className='rowItem'>{typeString(sesh.user.name)}</div>
+                            <div key={"type"} className='rowItem'>{typeString(sesh.type)}</div>
+                            <div key={"date"} className='rowItem'>{sesh.dateString}</div>
+                            <div key={"time"} className='rowItem'>{timeString(sesh.time)}</div>
+                            <div key={"length"} className='rowItem'>{lengthString(sesh.length)}</div>
+                            <div key={"cost"} className={`rowItem ${sesh.paid ? "paid" : "unpaid"}`}>${users.find(u => u.id === sesh.user.id).rate * sesh.length}</div>
+                            {user.admin && <input key={"paid"} value={sesh.id} checked={sesh.paid} onChange={handleCheckPaid} type="checkbox" />}
+                        </Row>
+                    }) }
+                    {<Row key={"space"}/>}
+                    {(!user.admin || user.id !== currentUserId) && totalDue}    
+                </ul> :
+                <p>No sessions booked.</p>
+            }
             
-            <ul className='gridContainer'>
-                {header}
-                {bookedSessions
-                    .filter(sesh => (user.admin && user.id === currentUserId) ? true : sesh.user.id == currentUserId)
-                    .map(sesh => {
-                    return <Row key={sesh.id}>
-                        <div key={"name"} className='rowItem'>{typeString(sesh.user.name)}</div>
-                        <div key={"type"} className='rowItem'>{typeString(sesh.type)}</div>
-                        <div key={"date"} className='rowItem'>{sesh.dateString}</div>
-                        <div key={"time"} className='rowItem'>{timeString(sesh.time)}</div>
-                        <div key={"length"} className='rowItem'>{lengthString(sesh.length)}</div>
-                        <div key={"cost"} className={`rowItem ${sesh.paid ? "paid" : "unpaid"}`}>${users.find(u => u.id === sesh.user.id).rate * sesh.length}</div>
-                        {user.admin && <input key={"paid"} value={sesh.id} checked={sesh.paid} onChange={handleCheckPaid} type="checkbox" />}
-                    </Row>
-                }) }
-                {<Row key={"space"}/>}
-                {(!user.admin || user.id !== currentUserId) && totalDue}    
-            </ul>
+            
         </div>
     )
 }
