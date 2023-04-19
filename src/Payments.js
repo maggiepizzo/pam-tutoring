@@ -18,9 +18,7 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
         updateDoc(doc(db, "sessions", sesh.id), {
             paid: !sesh.paid
         })
-        .then(() => {
-            setBookedSessions(bookedSessions.map(s => s.id === sesh.id ? {...s, paid: !s.paid} : s))
-        })
+        .then(() => setBookedSessions(bookedSessions.map(s => s.id === sesh.id ? {...s, paid: !s.paid} : s)))
     }
 
     const handleChangeRate = (e) => {
@@ -29,9 +27,7 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
             updateDoc(doc(db, "users", currentUserId), {
                 rate: newRate
             })
-            .then(() => {
-                setUsers(users.map(u => u.id === currentUserId ? {...u, rate: newRate} : u))
-            })
+            .then(() => setUsers(users.map(u => u.id === currentUserId ? {...u, rate: newRate} : u)))
         }
         setChangeRate(!changeRate)
     }

@@ -4,7 +4,7 @@ import { doc, setDoc } from "firebase/firestore";
 import PasswordField from './PasswordField.js';
 import './App.css';
 
-const CreateAccount = ({auth, users, setUsers, setView, db}) => {
+const CreateAccount = ({auth, users, setUsers, db}) => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [email1, setEmail1] = useState("");
@@ -25,20 +25,16 @@ const CreateAccount = ({auth, users, setUsers, setView, db}) => {
             setFeedback("Creating new account...")
             createUserWithEmailAndPassword(auth, email1, password1)
             .then((userCredential) => {
-                updateProfile(userCredential.user, {displayName: firstName + " " + lastName})
-                .then(() => {
-                    const userObject = {
-                        id: userCredential.user.uid,
-                        email: userCredential.user.email,
-                        admin: false,
-                        name: userCredential.user.displayName,
-                        rate: 100
-                    }
-                    setDoc(doc(db, "users", userCredential.user.uid), userObject);
-                    setUsers(users.concat([userObject]))
-                    setView('home')
-                }).catch((error) =>  console.error(error))
-            }).catch((error) => {
+                const userObject = {
+                    id: userCredential.user.uid,
+                    email: userCredential.user.email,
+                    admin: false,
+                    name: firstName + " " + lastName,
+                    rate: 100
+                }
+                setUsers(users.concat([userObject]))
+                setDoc(doc(db, "users", userCredential.user.uid), userObject)})
+            .catch((error) => {
                 console.error(error)
                 setFeedback("Could not create account.  Please try again.")})       
         }

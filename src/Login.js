@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import PasswordField from './PasswordField.js';
 import './App.css';
 
-const Login = ({ auth, setView}) => {
+const Login = ({ auth }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [feedback, setFeedback] = useState();
@@ -11,10 +11,7 @@ const Login = ({ auth, setView}) => {
     const handleLogin = async e => {
         e.preventDefault()
         signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-            setFeedback("Logging you in...")
-            setView('home')
-        })
+        .then(() => setFeedback("Logging you in..."))
         .catch((error) => {
             console.error(error)
             setFeedback("Username or password is incorrect.")

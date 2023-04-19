@@ -4,6 +4,7 @@ import Login from './Login.js';
 import CreateAccount from './CreateAccount.js'
 import Payments from './Payments.js'
 import HomePage from './HomePage'
+import LoadingPage from './LoadingPage.js';
 import './App.css';
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -28,11 +29,12 @@ const db = getFirestore(app)
 
 function App() {
   const [user, setUser] = useState(null)
-  const [view, setView] = useState('home');
+  const [view, setView] = useState(null);
   const [bookedSessions, setBookedSessions] = useState([]);
   const [availability, setAvailability] = useState([])
   const [specialAvailability, setSpecialAvailability] = useState([])
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => { 
     onSnapshot(collection(db, 'users'), (snapshot) => {
@@ -53,16 +55,23 @@ function App() {
   }, [])
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user === null) {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setLoading(true)
+      if (currentUser === null) {
         setUser(null)
+        setView('home')
       } else {
-        getDoc(doc(db, 'users', user.uid)).then((document) => setUser(document.data() ?? null))
+        getDoc(doc(db, 'users', currentUser.uid))
+        .then((document) => setUser(document.data() ?? null))
+        .then(() => setView('schedule'))
       }
+      setLoading(false)
     })
+    return unsubscribe
   }, [])
 
   return (
+    loading ? <LoadingPage/> :
     <div className="App">
       <header className="appHeader">
        <button className='homeButton' onClick={() => setView('home')}>Pam's Tutoring</button>
@@ -103,8 +112,7 @@ function App() {
       </header>
 
       <div className='calendarContainer'>
-        {view === 'home' && user &&  <p> Hi, {user.name}!  Use the buttons above to navigate to your schedule and payments.</p>}
-        {view === 'home' && !user && <HomePage/>}
+        {view === 'home' && <HomePage/>}
         {view === 'schedule' && <Calendar 
           bookedSessions={bookedSessions} 
           setBookedSessions={setBookedSessions}
@@ -116,8 +124,8 @@ function App() {
           users={users}
           db={db}/>}
         {view === 'payments' && <Payments bookedSessions={bookedSessions} setBookedSessions={setBookedSessions} user={user} users={users} setUsers={setUsers} db={db}/>}
-        {view === 'login' && <Login auth={auth} setView={setView} />}
-        {view === 'createAccount' && <CreateAccount auth={auth} users={users} setUsers={setUsers} setView={setView} db={db}/>}
+        {view === 'login' && <Login auth={auth} setView={setView} setUser={setUser} db={db} />}
+        {view === 'createAccount' && <CreateAccount auth={auth} users={users} setUsers={setUsers} db={db}/>}
       </div>
     </div>
   );

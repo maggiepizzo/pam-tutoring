@@ -2,6 +2,7 @@
 import { useState, Fragment } from 'react';
 import { v4 as uuid } from 'uuid';
 import './Calendar.css'
+import './Loader.css'
 import { typeString, timeString, lengthString } from './utils';
 import { doc, setDoc, deleteDoc } from "firebase/firestore"; 
 
