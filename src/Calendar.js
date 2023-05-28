@@ -210,8 +210,8 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
   const timeSlots = dateAvailability.times.filter(s => !bookedStartTimes.includes(Number(s.time)))
   const defaultTime = timeSlots[0].time
   const defaultLength = timeSlots[0].length
+  const defaultUser = user.admin ? users[0] : user
   const defaultType = 'in-person'
-  const [selectedUser, setSelectedUser] = useState(user.admin ? users[0] : user)
   
   const newEvent = withEvent || {
     id: uuid(),
@@ -221,9 +221,10 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
     dateString: preselectedDate.toDateString(), 
     time: defaultTime, 
     length: defaultLength,
-    user: {id: selectedUser.id, email: selectedUser.email, name: selectedUser.name},
+    user: {id: defaultUser.id, email: defaultUser.email, name: defaultUser.name},
     paid: false
   }
+  
   const [event, setEvent] = useState(newEvent)
 
   return (
@@ -272,9 +273,11 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
 
         {user.admin && 
         <label>User
-          <select 
-            value={selectedUser.id}
-            onChange={(e) => {setSelectedUser(users.find(u => e.target.value == u.id))}}>
+          <select
+            onChange={(e) => {
+              const newUser = users.find(u => e.target.value == u.id)
+              setEvent({...event, user: {id: newUser.id, email: newUser.email, name: newUser.name}})
+              }}>
             {users.map(u => <option value={u.id}>{u.name}</option>)}
           </select>
         </label>}
@@ -323,7 +326,7 @@ const AvailabilityForm = ({
       date: preselectedDate,
       dateString: preselectedDate.toDateString(),
       // if we don't have a special schedule for this date, start with the recurring times as a base
-      times: withEvent.recurring ? withEvent.recurring.times : [{id: uuid(), time: START_TIME, length: 1}],
+      times: withEvent.recurring ? withEvent.recurring.times : [],
     }
 
     const [event, setEvent] = useState(withEvent.special ? specialEvent : recurringEvent)
@@ -333,7 +336,7 @@ const AvailabilityForm = ({
     const bookedStartTimes = prebookedSessions.map(sesh => Number(sesh.time))
 
     const lastSession = event.times[event.times.length-1]
-    const roomForAnotherSession = Number(lastSession.time) + Number(lastSession.length) + 0.5 <= END_TIME
+    const roomForAnotherSession = !lastSession || Number(lastSession.time) + Number(lastSession.length) + 0.5 <= END_TIME
 
     const handleAddSlotPicker = () => {
       const lastSlot = event.times[event.times.length-1]
@@ -363,13 +366,16 @@ const AvailabilityForm = ({
             </select>
           </label>
 
-          {event.times.map(slot => 
+          {event.times.length > 0 ?
+           event.times.map(slot => 
             <SlotPicker 
               key={slot.id} 
               slot={slot} 
               disabled={bookedStartTimes.includes(Number(slot.time))} 
               event={event} 
-              setEvent={setEvent}/>)}
+              setEvent={setEvent}/>):
+            <p>No availability.</p>
+          }
           
           <button 
             onClick={handleAddSlotPicker} 

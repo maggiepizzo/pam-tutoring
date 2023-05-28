@@ -38,7 +38,7 @@ function App() {
 
   useEffect(() => { 
     const unsubscribe = onSnapshot(collection(db, 'users'), (snapshot) => {
-      setUsers(snapshot.docs.map(doc => doc.data()))
+      setUsers(snapshot.docs.map(doc => doc.data()).sort((a, b) => a.name.localeCompare(b.name)))
     })
     return unsubscribe
   }, [])
@@ -62,6 +62,7 @@ function App() {
     const unsubscribe = onSnapshot(collection(db, 'specialAvailability'), (snapshot) => {
         setSpecialAvailability(snapshot.docs.map(doc => doc.data()))
       })
+    return unsubscribe
   }, [])
 
   useEffect(() => {

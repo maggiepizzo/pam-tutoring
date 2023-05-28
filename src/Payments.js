@@ -34,7 +34,6 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
 
     const userMenu = users
         .filter(u => !user.admin || u.id !== user.id)
-        .sort((a, b) => a.name.localeCompare(b.name))
         .map(u => <option key={u.id} value={u.id}>{u.name}</option>)
 
     const header = 

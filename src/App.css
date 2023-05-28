@@ -125,26 +125,34 @@ ul {
   cursor: pointer;
 }
 
-.homePageHeader {
+.homePage {
   display: flex;
-  align-items: baseline;
 }
 
-.homePageHeader img {
+.homePage img {
   display: inline;
-  width: 40%;
+  width: 50vw;
+  height: auto;
+  border-radius: 20px;
+  float: 'left';
+  margin-right: 4vw;
 }
 
-.homePageHeader h1 {
-  margin-left: 10px;
+.homePage p {
+  line-height: 28px;
 }
 
 h1 {
   font-size: 2.5em;
   font-weight: lighter;
-  width: 400px;
+}
+
+h2 {
+  font-size: 2em;
+  font-weight: lighter;
 }
 
 p {
   font-size: 1em;
+  font-weight: light;
 }
