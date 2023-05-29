@@ -304,4 +304,5 @@ button.red {
     border-radius: 20px;
     text-align: center;
     color: white;
+    z-index: 2;
 }
