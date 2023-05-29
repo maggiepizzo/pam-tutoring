@@ -66,14 +66,14 @@ const SlotPicker = ({slot, disabled, event, setEvent}) => {
   const [timeSlot, setTimeSlot] = useState(slot)
 
   // 21 is the absolute max end time, in case the current start time is the latest one in our list
-  const endTimes = event.times.map(t => Number(t.time)).filter(t => t > Number(slot.time))
+  const endTimes = event.times.map(t => t.time).filter(t => t > slot.time)
   const maxEndTime = Math.min(...endTimes, END_TIME)
 
   // 8 is the absolute min start time, in case the current start time is the earliest one in our list
-  const startTimes = event.times.map(t => Number(t.time) + Number(t.length)).filter(t => t <= Number(slot.time))
+  const startTimes = event.times.map(t => t.time + t.length).filter(t => t <= slot.time)
   const minStartTime = Math.max(...startTimes, START_TIME)
   
-  const maxLength = maxEndTime - Number(slot.time)
+  const maxLength = maxEndTime - slot.time
   const minLength = 0.5
   const step = 0.25
 
@@ -82,7 +82,7 @@ const SlotPicker = ({slot, disabled, event, setEvent}) => {
         
         <label>Start Time
         <select disabled={disabled} value={timeSlot.time} onChange={(e) => {
-          const newTimeSlot = {...timeSlot, time: e.target.value}
+          const newTimeSlot = {...timeSlot, time: Number(e.target.value)}
           setTimeSlot(newTimeSlot)
           const newTimes = event.times.map(t => t.id == timeSlot.id ? newTimeSlot : t)
           setEvent({ ...event, times: newTimes})
@@ -93,7 +93,7 @@ const SlotPicker = ({slot, disabled, event, setEvent}) => {
             
         <label>Length
         <select disabled={disabled} value={timeSlot.length} onChange={(e) => {
-            const newTimeSlot = { ...timeSlot, length: e.target.value }
+            const newTimeSlot = { ...timeSlot, length: Number(e.target.value) }
             setTimeSlot(newTimeSlot)    
             const newTimes = event.times.map(t => t.id == timeSlot.id ? newTimeSlot : t)
             setEvent({ ...event, times: newTimes})
@@ -206,8 +206,8 @@ const Event = ({ event, setViewingEvent, setShowingEventForm, deleteEvent, avail
 
 // Form to add new sessions and edit existing sessions
 const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setViewingEvent, preselectedDate, dateAvailability, prebookedSessions, user, users }) => {
-  const bookedStartTimes = prebookedSessions.map(sesh => Number(sesh.time))
-  const timeSlots = dateAvailability.times.filter(s => !bookedStartTimes.includes(Number(s.time)))
+  const bookedStartTimes = prebookedSessions.map(sesh => sesh.time)
+  const timeSlots = dateAvailability.times.filter(s => !bookedStartTimes.includes(s.time))
   const defaultTime = timeSlots[0].time
   const defaultLength = timeSlots[0].length
   const defaultUser = user.admin ? users[0] : user
@@ -241,8 +241,8 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
           <select 
           value={event.time}
           onChange={(e) => {
-            const time = e.target.value
-            const length = timeSlots.find(slot => slot.time == time).length
+            const time = Number(e.target.value)
+            const length = timeSlots.find(slot => slot.time === time).length
             setEvent({ ...event, 
               time: time,
               length: length})
@@ -333,14 +333,14 @@ const AvailabilityForm = ({
     const [recurring, setRecurring] = useState(withEvent.special ? false : true)
     const date = preselectedDate.getDate()
     const dateString = preselectedDate.toDateString()
-    const bookedStartTimes = prebookedSessions.map(sesh => Number(sesh.time))
+    const bookedStartTimes = prebookedSessions.map(sesh => sesh.time)
 
     const lastSession = event.times[event.times.length-1]
-    const roomForAnotherSession = !lastSession || Number(lastSession.time) + Number(lastSession.length) + 0.5 <= END_TIME
+    const roomForAnotherSession = !lastSession || lastSession.time +lastSession.length + 0.5 <= END_TIME
 
     const handleAddSlotPicker = () => {
       const lastSlot = event.times[event.times.length-1]
-      const startTime = lastSlot ? Number(lastSlot.time) + Number(lastSlot.length) : START_TIME
+      const startTime = lastSlot ? lastSlot.time + lastSlot.length : START_TIME
       setEvent({...event, times: event.times.concat([{id: uuid(), time: startTime, length: 1}])})  
     }
 
@@ -371,7 +371,7 @@ const AvailabilityForm = ({
             <SlotPicker 
               key={slot.id} 
               slot={slot} 
-              disabled={bookedStartTimes.includes(Number(slot.time))} 
+              disabled={bookedStartTimes.includes(slot.time)} 
               event={event} 
               setEvent={setEvent}/>):
             <p>No availability.</p>
@@ -446,8 +446,8 @@ const Grid = ({ date, bookedSessions, availability, specialAvailability, setView
     const dateBookedSessions = findEventsForDate(bookedSessions, date.toDateString())
     const dateAvailabilityObject = findAvailabilityForDate(availability, specialAvailability, date.toDateString(), date.getDay())
     const dateAvailability = dateAvailabilityObject.special ?? dateAvailabilityObject.recurring
-    const bookedStartTimes = dateBookedSessions.map(sesh => Number(sesh.time))
-    const availableSlots = dateAvailability ? dateAvailability.times.filter(s => !bookedStartTimes.includes(Number(s.time))) : []
+    const bookedStartTimes = dateBookedSessions.map(sesh => sesh.time)
+    const availableSlots = dateAvailability ? dateAvailability.times.filter(s => !bookedStartTimes.includes(s.time)) : []
     const displayEvents = dateBookedSessions.filter(sesh => user.admin || sesh.user.id == user.id).map(event => 
       <MiniEvent key={event.id} event={event} setViewingEvent={setViewingEvent} admin={user.admin} />)
       .concat(availableSlots.map(event => 
