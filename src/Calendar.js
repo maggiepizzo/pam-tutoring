@@ -5,6 +5,7 @@ import './Calendar.css'
 import './Loader.css'
 import { typeString, timeString, lengthString } from './utils';
 import { doc, setDoc, deleteDoc } from "firebase/firestore"; 
+import _ from 'lodash';
 
 const MONTHS = [
   "January",
@@ -27,7 +28,7 @@ const DAYS_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Frid
 
 const START_TIME = 8
 
-const END_TIME = 21
+const END_TIME = 22
 
 const toStartOfDay = (date) => {
 	const newDate = new Date(date)
@@ -50,7 +51,7 @@ const findEventsForDate = (events, dateString) => {
 const findAvailabilityForDate = (availability, specialAvailability, dateString, day) => {
   return {
     "special" : specialAvailability.find(a => a.dateString === dateString),
-    "recurring" : availability.find(a => a.day == day)
+    "recurring" : availability.find(a => a.day === day)
   }
 }
 
@@ -83,8 +84,8 @@ const SlotPicker = ({slot, disabled, event, setEvent}) => {
         <label>Start Time
         <select disabled={disabled} value={timeSlot.time} onChange={(e) => {
           const newTimeSlot = {...timeSlot, time: Number(e.target.value)}
-          setTimeSlot(newTimeSlot)
-          const newTimes = event.times.map(t => t.id == timeSlot.id ? newTimeSlot : t)
+          setTimeSlot(() => newTimeSlot)
+          const newTimes = event.times.map(t => t.id === timeSlot.id ? newTimeSlot : t)
           setEvent({ ...event, times: newTimes})
           }}>
           {getTimeArray(minStartTime, maxEndTime - minLength, step).map(time => <option key={time} value={time}>{timeString(time)}</option>)}
@@ -94,8 +95,8 @@ const SlotPicker = ({slot, disabled, event, setEvent}) => {
         <label>Length
         <select disabled={disabled} value={timeSlot.length} onChange={(e) => {
             const newTimeSlot = { ...timeSlot, length: Number(e.target.value) }
-            setTimeSlot(newTimeSlot)    
-            const newTimes = event.times.map(t => t.id == timeSlot.id ? newTimeSlot : t)
+            setTimeSlot(() => newTimeSlot)    
+            const newTimes = event.times.map(t => t.id === timeSlot.id ? newTimeSlot : t)
             setEvent({ ...event, times: newTimes})
             }}>
             {getTimeArray(minLength, maxLength, step).map(length => <option key={length} value={length}>{lengthString(length)}</option>)}
@@ -275,7 +276,7 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
         <label>User
           <select
             onChange={(e) => {
-              const newUser = users.find(u => e.target.value == u.id)
+              const newUser = users.find(u => e.target.value === u.id)
               setEvent({...event, user: {id: newUser.id, email: newUser.email, name: newUser.name}})
               }}>
             {users.map(u => <option value={u.id}>{u.name}</option>)}
@@ -284,7 +285,11 @@ const EventForm = ({ setShowingEventForm, addEvent, editEvent, withEvent, setVie
 
         {withEvent ? (
         	<Fragment>
-            <button onClick={() => editEvent(event)} disabled={event == withEvent}>Save Session</button>
+            <button 
+              onClick={() => editEvent(event)} 
+              disabled={_.isEqual(event, withEvent)}>
+                Save Session
+            </button>
             <a className="close" onClick={() => {
             	setShowingEventForm({ visible: false })
             	setViewingEvent(null)}
@@ -336,7 +341,7 @@ const AvailabilityForm = ({
     const bookedStartTimes = prebookedSessions.map(sesh => sesh.time)
 
     const lastSession = event.times[event.times.length-1]
-    const roomForAnotherSession = !lastSession || lastSession.time +lastSession.length + 0.5 <= END_TIME
+    const roomForAnotherSession = !lastSession || lastSession.time + lastSession.length + 0.5 <= END_TIME
 
     const handleAddSlotPicker = () => {
       const lastSlot = event.times[event.times.length-1]
@@ -384,7 +389,9 @@ const AvailabilityForm = ({
           </button>
 
           <Fragment>
-            <button onClick={() => recurring ? (withEvent.recurring ? editAvailability(event) : addAvailability(event)) : (withEvent.special ? editSpecialAvailability(event) : addSpecialAvailability(event))} disabled={event == withEvent} >
+            <button 
+              onClick={() => recurring ? (withEvent.recurring ? editAvailability(event) : addAvailability(event)) : (withEvent.special ? editSpecialAvailability(event) : addSpecialAvailability(event))}
+              disabled={_.isEqual(event, withEvent)} >
               Save Availability
             </button>
             <a className="close" onClick={() => {
@@ -448,7 +455,7 @@ const Grid = ({ date, bookedSessions, availability, specialAvailability, setView
     const dateAvailability = dateAvailabilityObject.special ?? dateAvailabilityObject.recurring
     const bookedStartTimes = dateBookedSessions.map(sesh => sesh.time)
     const availableSlots = dateAvailability ? dateAvailability.times.filter(s => !bookedStartTimes.includes(s.time)) : []
-    const displayEvents = dateBookedSessions.filter(sesh => user.admin || sesh.user.id == user.id).map(event => 
+    const displayEvents = dateBookedSessions.filter(sesh => user.admin || sesh.user.id === user.id).map(event => 
       <MiniEvent key={event.id} event={event} setViewingEvent={setViewingEvent} admin={user.admin} />)
       .concat(availableSlots.map(event => 
       <MiniAvailableEvent key={event.id} event={event} />))
@@ -471,7 +478,7 @@ const Grid = ({ date, bookedSessions, availability, specialAvailability, setView
         return (
           <div 
             key={index}
-            className={`cell ${date.date.getTime() == currentDate.getTime() ? "current" : ""} ${date.date.getMonth() != actualDate.getMonth() ? "otherMonth" : ""}`
+            className={`cell ${date.date.getTime() === currentDate.getTime() ? "current" : ""} ${date.date.getMonth() != actualDate.getMonth() ? "otherMonth" : ""}`
 						}>
             <div className="dateContainer">
                 <div className="date">

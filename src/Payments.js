@@ -47,7 +47,7 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
             {user.admin && <div key={"paid"} className='rowItem rowHeader'>Paid</div>}
         </Row>
 
-    const selectedSessions = bookedSessions.filter(sesh => (user.admin && user.id === currentUserId) || sesh.user.id == currentUserId)
+    const selectedSessions = bookedSessions.filter(sesh => (user.admin && user.id === currentUserId) || sesh.user.id === currentUserId)
 
     const totalDue = 
         <Row key={"totalDue"}>
@@ -79,6 +79,10 @@ const Payments = ({bookedSessions, setBookedSessions, user, users, setUsers, db}
                 <ul className='gridContainer'>
                     {header}
                     {selectedSessions
+                        .sort((a,b) => {
+                            const dateSort = a.date - b.date
+                            return dateSort !== 0 ? dateSort : a.time - b.time
+                        })
                         .map(sesh => {
                         return <Row key={sesh.id}>
                             <div key={"name"} className='rowItem'>{typeString(sesh.user.name)}</div>
