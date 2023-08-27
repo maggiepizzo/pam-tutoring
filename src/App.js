@@ -85,7 +85,7 @@ function App() {
     loading ? <LoadingPage/> :
     <div className="App">
       <header className="appHeader">
-       <button className='homeButton' onClick={() => setView('home')}>Pam's Tutoring</button>
+       <button className='homeButton' onClick={() => setView('home')}>Pam Friedman Tutoring</button>
         {user !== null ? 
         <div className="tabContainer">
           <button 
